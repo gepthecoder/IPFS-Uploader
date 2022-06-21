@@ -22,6 +22,12 @@
 
       // TODO:
       // login function
+      login = async () => {
+        Moralis.authenticate().then(function (user) {
+            console.log(user.get('ethAddress'))
+        })
+      }
+       
       // upload: image, metadata object (txt & image)
       // function to gogogo
     </script>
