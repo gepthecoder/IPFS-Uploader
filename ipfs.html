@@ -7,11 +7,11 @@
   <body>
     <h1>IPFS Demo</h1>
 
-    <button id="btn-login">Login</button><br><br>
+    <button onclick=login() id="btn-login">Login</button><br><br>
     <input type ="text" name="metadataName" id="metadataName" placeholder="name"><br>
     <textarea name="metadataDescription" id="metadataDescription" cols="30" rows="10"></textarea><br>
-    <input type ="file" name="fileInput" id="fileInput"><br><br>
-
+    <input type ="file" name="fileInput" id="fileInput" onchange="loadFile(event)"><br><br>
+    <img id="output" width="200" /><br><br>
     <button onclick=gogogo()>GO GO GO GO</button>
 
     <script>
@@ -23,6 +23,7 @@
       // login function
       login = async () => {
         Moralis.authenticate().then(function (user) {
+            document.getElementById('btn-login').innerHTML = user.get('ethAddress');
             console.log(user.get('ethAddress'))
         })
       }
@@ -40,6 +41,12 @@
         return file.ipfs();
       }
 
+      var loadFile = function(event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+
+
       // upload: metadata object (name, desc txt & image)
       uploadMetadata = async (imageURL) => {
         const name = document.getElementById('metadataName').value;
@@ -55,10 +62,17 @@
             base64: btoa(JSON.stringify(metadata)),
         });
         await file.saveIPFS();
+
+        console.log('✅', file.ipfs());
       }
 
       // function to gogogo
+      gogogo = async () => {
+        const image = await uploadImage();
+        await uploadMetadata(image);
+      }
 
+      
     </script>
   </body>
 </html>
