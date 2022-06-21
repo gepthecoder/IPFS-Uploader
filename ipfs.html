@@ -20,7 +20,6 @@
       const appId = "3jG6WmSa66mwidShXmeRMa6okdNdDGnPmsk5bq0s";
       Moralis.start({ serverUrl, appId });
 
-      // TODO:
       // login function
       login = async () => {
         Moralis.authenticate().then(function (user) {
@@ -29,7 +28,18 @@
       }
        
       // upload: image, metadata object (txt & image)
+      uploadImage = async() => {
+        // Save file input to IPFS
+        const data = fileInput.files[0];
+        const file = new Moralis.File(data.name, data);
+        await file.saveIPFS();
+
+        console.log(file.ipfs(), file.hash());
+        return file.ipfs();
+      }
+
       // function to gogogo
+
     </script>
   </body>
 </html>
